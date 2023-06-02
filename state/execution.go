@@ -1,6 +1,7 @@
 package state
 
 import (
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"time"
@@ -170,8 +171,15 @@ func (blockExec *BlockExecutor) ApplyBlock(
 		blockExec.logger.Debug("updates to validators", "updates", types.ValidatorListString(validatorUpdates))
 	}
 
+	for i, d := range abciResponses.DeliverTxs {
+		fmt.Println("-DEBUGG-tendermint-abciResponses--", i, d.Code, d.Codespace, d.GasWanted, d.GasUsed, hex.EncodeToString(d.Data))
+		blockExec.logger.Info("-DEBUGG-tendermint-abciResponses-", "i", i, "Code", d.Code, "Codespace", d.Codespace, "GasWanted", d.GasWanted, "GasUsed", d.GasUsed, "Data", hex.EncodeToString(d.Data))
+	}
+
 	// Update the state with the block and responses.
 	state, err = updateState(state, blockID, &block.Header, abciResponses, validatorUpdates)
+	fmt.Println("-DEBUGG-updateState.LastResultsHash--", state.LastBlockHeight, state.LastResultsHash)
+	blockExec.logger.Info("-DEBUGG-updateState.LastResultsHash--", "LastBlockHeight", state.LastBlockHeight, "LastResultsHash", state.LastResultsHash)
 	if err != nil {
 		return state, 0, fmt.Errorf("commit failed for application: %v", err)
 	}

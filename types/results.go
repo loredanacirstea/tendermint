@@ -1,6 +1,8 @@
 package types
 
 import (
+	"fmt"
+
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/crypto/merkle"
 )
@@ -14,6 +16,7 @@ func NewResults(responses []*abci.ResponseDeliverTx) ABCIResults {
 	res := make(ABCIResults, len(responses))
 	for i, d := range responses {
 		res[i] = deterministicResponseDeliverTx(d)
+		fmt.Println("--DEBUGG--deterministicResponseDeliverTx[i]--", i, res[i])
 	}
 	return res
 }

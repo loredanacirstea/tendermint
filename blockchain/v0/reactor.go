@@ -372,6 +372,8 @@ FOR_LOOP:
 			}
 
 			if err != nil {
+				fmt.Println("---DEBUGG-tendermint-reactor")
+				bcR.Logger.Info("---DEBUGG-tendermint-reactor")
 				bcR.Logger.Error("Error in validation", "err", err)
 				peerID := bcR.pool.RedoRequest(first.Height)
 				peer := bcR.Switch.Peers().Get(peerID)
